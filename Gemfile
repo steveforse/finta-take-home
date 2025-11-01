@@ -42,6 +42,8 @@ gem "faraday"
 gem "active_interaction"
 gem "strong_migrations"
 gem "pg"
+gem "whenever"
+gem "awesome_print"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
