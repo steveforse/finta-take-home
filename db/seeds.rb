@@ -7,3 +7,16 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+expenses = CategoryGroup.find_or_create_by!(name: "Expenses")
+income = CategoryGroup.find_or_create_by!(name: "Income")
+
+[
+  [expenses, "Meals"],
+  [expenses, "Travel"],
+  [expenses, "Software"],
+  [income, "Revenue"],
+  [income, "Interest"]
+].each do |category_group, name|
+  Category.find_or_create_by!(name: name, category_group: category_group)
+end
