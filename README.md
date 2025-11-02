@@ -1,13 +1,13 @@
-## TODO
-So much to do here.
+## Setup
+1. Clone repo
+2. Run `bundle install` to load dependencies
+3. Run `rake db:setup`to load schema for app and queue
+4. Run `rake db:seed` to add default categories and category groups
+5. Run `rails s -b 0.0.0.0 -p 3000` to start web server
+6. Run `bin/jobs start` so that jobs can run in the background
 
-1. I created a model called Transaction. That obviously needs a rename.
-2. Add paging support for upsert CC/Bank Accounts
-3. Implement upsert CC Transactions (another cursor for CC trx, etc.)
-4. Didn't get around to scheduling via whenever gem
-5. For performanc reasons, maybe I should've made UUID the primary key in order to easily make use of uspert_all
-6. Upserts could probably use some optimizations
-7. Implement error handling for API requests
-8. Auth key should probably in ENV var
-9. Didn't get around to any of the frontend bits; probably been too long since I generated a RoR project (felt a bit rusty)
-10. Needs tests
+## TODO
+1. Add paging support for upsert CC/Bank Accounts
+2. For performance reasons, maybe I should've made UUID the primary key in order to easily make use of uspert_all
+3. Implement error handling for API requests
+4. Needs tests
