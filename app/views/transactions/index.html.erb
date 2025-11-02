@@ -168,9 +168,49 @@
               </li>
             <% end %>
 
-            <% (1..@transactions.total_pages).each do |page| %>
+            <%
+              # Calculate page range to show (max 10 pages)
+              current = @transactions.current_page
+              total = @transactions.total_pages
+              max_pages = 10
+              
+              if total <= max_pages
+                page_range = (1..total)
+              else
+                # Show pages around current page
+                half_window = (max_pages / 2).floor
+                
+                if current <= half_window
+                  page_range = (1..max_pages)
+                elsif current >= total - half_window
+                  page_range = ((total - max_pages + 1)..total)
+                else
+                  page_range = ((current - half_window)..(current + half_window))
+                end
+              end
+            %>
+
+            <% if page_range.first > 1 %>
+              <li class="page-item">
+                <%= link_to 1, transactions_path(params.permit!.merge(page: 1)), class: "page-link" %>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link">...</span>
+              </li>
+            <% end %>
+
+            <% page_range.each do |page| %>
               <li class="page-item <%= 'active' if page == @transactions.current_page %>">
                 <%= link_to page, transactions_path(params.permit!.merge(page: page)), class: "page-link" %>
+              </li>
+            <% end %>
+
+            <% if page_range.last < total %>
+              <li class="page-item disabled">
+                <span class="page-link">...</span>
+              </li>
+              <li class="page-item">
+                <%= link_to total, transactions_path(params.permit!.merge(page: total)), class: "page-link" %>
               </li>
             <% end %>
 
