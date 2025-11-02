@@ -8,6 +8,7 @@
 
 ## TODO
 1. Add paging support for upsert CC/Bank Accounts
-2. For performance reasons, maybe I should've made UUID the primary key in order to easily make use of uspert_all
-3. Implement error handling for API requests
-4. Needs tests
+2. Implement `.each` for cursors
+3. For performance reasons, maybe I should've made UUID the primary key in order to easily make use of uspert_all
+4. Implement error handling for API requests
+5. Needs more tests; particularly around the filters
