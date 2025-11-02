@@ -31,7 +31,7 @@ class UpsertCreditCardTransactions < ActiveInteraction::Base
           amount_currency: "USD",
           description: transaction["description"],
           status: transaction["status"],
-          account_type: "BankAccount",
+          account_type: "CreditCard",
           account_id: CreditCard.find_by(uuid: transaction["credit_card_id"]).id,
           remote_data: transaction,
         )
