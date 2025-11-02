@@ -46,6 +46,7 @@ gem "whenever"
 gem "awesome_print"
 gem "money-rails"
 gem "kaminari"
+gem "pry-rails"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
