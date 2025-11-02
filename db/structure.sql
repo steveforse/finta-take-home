@@ -21,6 +21,46 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: account_transactions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.account_transactions (
+    id bigint NOT NULL,
+    uuid uuid NOT NULL,
+    date date NOT NULL,
+    amount_cents integer NOT NULL,
+    amount_currency character varying NOT NULL,
+    description character varying,
+    status character varying,
+    category_id bigint,
+    account_type character varying NOT NULL,
+    account_id bigint NOT NULL,
+    remote_data jsonb DEFAULT '{}'::jsonb,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: account_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.account_transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: account_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.account_transactions_id_seq OWNED BY public.account_transactions.id;
+
+
+--
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -177,43 +217,10 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: transactions; Type: TABLE; Schema: public; Owner: -
+-- Name: account_transactions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-CREATE TABLE public.transactions (
-    id bigint NOT NULL,
-    uuid uuid NOT NULL,
-    date date NOT NULL,
-    amount_cents integer NOT NULL,
-    amount_currency character varying NOT NULL,
-    description character varying,
-    status character varying,
-    category_id bigint,
-    account_type character varying NOT NULL,
-    account_id bigint NOT NULL,
-    remote_data jsonb DEFAULT '{}'::jsonb,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.transactions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.transactions_id_seq OWNED BY public.transactions.id;
+ALTER TABLE ONLY public.account_transactions ALTER COLUMN id SET DEFAULT nextval('public.account_transactions_id_seq'::regclass);
 
 
 --
@@ -245,10 +252,11 @@ ALTER TABLE ONLY public.credit_cards ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- Name: transactions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: account_transactions account_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.transactions ALTER COLUMN id SET DEFAULT nextval('public.transactions_id_seq'::regclass);
+ALTER TABLE ONLY public.account_transactions
+    ADD CONSTRAINT account_transactions_pkey PRIMARY KEY (id);
 
 
 --
@@ -300,11 +308,52 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: index_account_transactions_on_account; Type: INDEX; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.transactions
-    ADD CONSTRAINT transactions_pkey PRIMARY KEY (id);
+CREATE INDEX index_account_transactions_on_account ON public.account_transactions USING btree (account_type, account_id);
+
+
+--
+-- Name: index_account_transactions_on_amount_cents; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_transactions_on_amount_cents ON public.account_transactions USING btree (amount_cents);
+
+
+--
+-- Name: index_account_transactions_on_amount_currency; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_transactions_on_amount_currency ON public.account_transactions USING btree (amount_currency);
+
+
+--
+-- Name: index_account_transactions_on_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_transactions_on_category_id ON public.account_transactions USING btree (category_id);
+
+
+--
+-- Name: index_account_transactions_on_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_transactions_on_date ON public.account_transactions USING btree (date);
+
+
+--
+-- Name: index_account_transactions_on_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_transactions_on_status ON public.account_transactions USING btree (status);
+
+
+--
+-- Name: index_account_transactions_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_account_transactions_on_uuid ON public.account_transactions USING btree (uuid);
 
 
 --
@@ -406,60 +455,11 @@ CREATE UNIQUE INDEX index_credit_cards_on_uuid ON public.credit_cards USING btre
 
 
 --
--- Name: index_transactions_on_account; Type: INDEX; Schema: public; Owner: -
+-- Name: account_transactions fk_rails_4faf1153be; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-CREATE INDEX index_transactions_on_account ON public.transactions USING btree (account_type, account_id);
-
-
---
--- Name: index_transactions_on_amount_cents; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_transactions_on_amount_cents ON public.transactions USING btree (amount_cents);
-
-
---
--- Name: index_transactions_on_amount_currency; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_transactions_on_amount_currency ON public.transactions USING btree (amount_currency);
-
-
---
--- Name: index_transactions_on_category_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_transactions_on_category_id ON public.transactions USING btree (category_id);
-
-
---
--- Name: index_transactions_on_date; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_transactions_on_date ON public.transactions USING btree (date);
-
-
---
--- Name: index_transactions_on_status; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_transactions_on_status ON public.transactions USING btree (status);
-
-
---
--- Name: index_transactions_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_transactions_on_uuid ON public.transactions USING btree (uuid);
-
-
---
--- Name: transactions fk_rails_0ea2ad3927; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.transactions
-    ADD CONSTRAINT fk_rails_0ea2ad3927 FOREIGN KEY (category_id) REFERENCES public.categories(id);
+ALTER TABLE ONLY public.account_transactions
+    ADD CONSTRAINT fk_rails_4faf1153be FOREIGN KEY (category_id) REFERENCES public.categories(id);
 
 
 --

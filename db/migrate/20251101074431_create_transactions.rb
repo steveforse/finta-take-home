@@ -1,6 +1,6 @@
 class CreateTransactions < ActiveRecord::Migration[8.1]
   def change
-    create_table :transactions do |t|
+    create_table :account_transactions do |t|
       t.uuid :uuid, null: false
       t.date :date, null: false
       t.integer :amount_cents, null: false
@@ -13,10 +13,10 @@ class CreateTransactions < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :transactions, :uuid, unique: true
-    add_index :transactions, :date
-    add_index :transactions, :amount_cents
-    add_index :transactions, :amount_currency
-    add_index :transactions, :status
+    add_index :account_transactions, :uuid, unique: true
+    add_index :account_transactions, :date
+    add_index :account_transactions, :amount_cents
+    add_index :account_transactions, :amount_currency
+    add_index :account_transactions, :status
   end
 end

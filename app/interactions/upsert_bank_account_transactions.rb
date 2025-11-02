@@ -22,7 +22,7 @@ class UpsertBankAccountTransactions < ActiveInteraction::Base
 
   def upsert_batch(transactions)
     transactions.each do |transaction|
-      Transaction
+      AccountTransaction
         .find_or_initialize_by(uuid: transaction["uuid"])
         .update(
           date: Time.at(transaction["date"]),
