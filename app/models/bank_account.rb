@@ -1,5 +1,5 @@
 class BankAccount < ApplicationRecord
-  has_many :transactions, as: :account, dependent: :destroy
+  has_many :account_transactions, as: :account, dependent: :destroy
 
   validates :uuid, presence: true, uniqueness: true
 end
