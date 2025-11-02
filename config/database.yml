@@ -3,11 +3,17 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 development:
-  <<: *default
-  database: finta-take-home_development
+  primary:
+    <<: *default
+    database: finta-take-home_development
+  queue:
+    <<: *default
+    database: finta-take-home_development_queue
+    migrations_paths: db/queue_migrate
 test:
   <<: *default
   database: finta-take-home_test
+
 production:
   primary:
     <<: *default
